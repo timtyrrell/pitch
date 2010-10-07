@@ -1,0 +1,5 @@
+- should they be modules?
+- how to make interactive?
+- how do I path the spec correctly?
+- "before" spec setup OK?
+
