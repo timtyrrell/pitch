@@ -2,4 +2,5 @@
 - how to make interactive?
 - how do I path the spec correctly?
 - "before" spec setup OK?
+- non-instance variables, use when they are only contained in that class or method?
 
