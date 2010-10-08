@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/player'
 require File.dirname(__FILE__) + '/deck'
-
 class Pitch
   attr_reader :deck, :player1, :player2, :player3, :player4, :players, :current_dealer
 
