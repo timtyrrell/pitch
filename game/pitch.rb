@@ -1,5 +1,6 @@
-require File.dirname(__FILE__) + '/player'
-require File.dirname(__FILE__) + '/deck'
+require './player'
+require './deck'
+
 class Pitch
   attr_reader :deck, :player1, :player2, :player3, :player4, :players, :current_dealer
 
@@ -20,6 +21,7 @@ class Pitch
     puts "State your bid (2 to 5):"
     STDOUT.flush
     bid = gets.chomp
+
     puts "received bid of " + bid
   end
 

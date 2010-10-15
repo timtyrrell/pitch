@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/pitch'
+require './pitch'
 
-@pitch = Pitch.new
-@pitch.accept_bids
+pitch = Pitch.new
+pitch.accept_bids
 
