@@ -1,8 +1,9 @@
-require './player'
-require './deck'
+require File.dirname(__FILE__) + '/player'
+require File.dirname(__FILE__) + '/deck'
 
 class Pitch
   attr_reader :deck, :player1, :player2, :player3, :player4, :players, :current_dealer
+  attr_accessor :current_high_bid
 
   def initialize
     get_cards
@@ -16,23 +17,23 @@ class Pitch
     assign_current_dealer
   end
 
-  def accept_bids
-    #TODO: display all bids by players
-    puts "State your bid (2 to 5):"
-    STDOUT.flush
-    bid = gets.chomp
-
-    puts "received bid of " + bid
+  def accept_bids(bids)
+   @current_high_bid  = {"bid_value" => 1}
+    bids.each do |key, value|
+      unless value.nil? or value <= @current_high_bid["bid_value"]
+        @current_high_bid = { "team" => key.team, "bid_value" => value }
+      end
+    end
   end
 
   private
     def deal_cards
        2.times{
-          self.players.each { |player|
+          self.players.each do |player|
             3.times{
                 player.cards << @deck.cards.slice!(0)
               }
-            }
+          end
        }
     end
 
@@ -46,10 +47,10 @@ class Pitch
     end
 
     def get_players
-      @player1 = Player.new :team1
-      @player2 = Player.new :team2
-      @player3 = Player.new :team1
-      @player4 = Player.new :team2
+      @player1 = Player.new "team1"
+      @player2 = Player.new "team2"
+      @player3 = Player.new "team1"
+      @player4 = Player.new "team2"
       @players = [@player1, @player2, @player3, @player4]
     end
 end

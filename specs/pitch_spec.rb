@@ -15,7 +15,7 @@ describe "Pitch game testing" do
       @pitch.players.length.should == 4
     end
 
-    it "should know which player has the current dealer do" do
+    it "should know which player has the current dealer" do
       @pitch.current_dealer.should == @pitch.player1
     end
 
@@ -41,6 +41,29 @@ describe "Pitch game testing" do
       @pitch.player1.cards.length.should == 6
     end
 
+  end
+  describe "when accepting bids" do
+    before(:each) do
+      @pitch = Pitch.new
+      bids = { @pitch.player1 => 2, @pitch.player2 => nil, @pitch.player3 => 4, @pitch.player4 => 2}
+      @pitch.accept_bids bids
+    end
+
+    it "should know the team of the accepted bid" do
+      @pitch.current_high_bid["team"].should == "team1"
+    end
+
+    it "should disregard all bids but the highest one" do
+      @pitch.current_high_bid["bid_value"].should == 4
+    end
+
+    it "should have the player with the highest bid play first" do
+
+    end
+
+    it "should know the declated trump of the bidding team" do
+
+    end
   end
 end
 
