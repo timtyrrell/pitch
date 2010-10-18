@@ -1,7 +1,8 @@
 class Player
-  attr_accessor :team, :cards, :bid
-  def initialize(team)
+  attr_accessor :team, :cards, :name
+  def initialize(team, name)
     @team = team
+    @name = name
     @cards = []
   end
 end
