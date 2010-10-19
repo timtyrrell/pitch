@@ -42,9 +42,9 @@ describe "Pitch game testing" do
     end
 
   end
+
   describe "when accepting bids" do
     before(:each) do
-      @pitch = Pitch.new
       bids = { @pitch.player1 => 2, @pitch.player2 => nil, @pitch.player3 => 4, @pitch.player4 => 2}
       @pitch.accept_bids bids
       @pitch.trump = "Player3"
@@ -61,8 +61,46 @@ describe "Pitch game testing" do
     it "should know the declared trump of the bidding team" do
       @pitch.trump.should == @pitch.current_high_bid["player"].name
     end
+  end
 
-    it "should have the player with the highest bid play first" do
+  describe "when creating the player order for the round" do
+    it "should order correctly when Player1 has the high bid" do
+      @pitch.current_high_bid = { "player" => @pitch.player1}
+      @pitch.set_round_player_order
+      @pitch.current_round_player_order.should == [@pitch.player1, @pitch.player2, @pitch.player3, @pitch.player4]
+    end
+
+     it "should order correctly when Player1 has the high bid" do
+      @pitch.current_high_bid = { "player" => @pitch.player2}
+      @pitch.set_round_player_order
+      @pitch.current_round_player_order.should == [@pitch.player2, @pitch.player3, @pitch.player4, @pitch.player1]
+    end
+
+     it "should order correctly when Player1 has the high bid" do
+      @pitch.current_high_bid = { "player" => @pitch.player3}
+      @pitch.set_round_player_order
+      @pitch.current_round_player_order.should == [@pitch.player3, @pitch.player4, @pitch.player1, @pitch.player2]
+    end
+
+     it "should order correctly when Player1 has the high bid" do
+      @pitch.current_high_bid = { "player" => @pitch.player4}
+      @pitch.set_round_player_order
+      @pitch.current_round_player_order.should == [@pitch.player4, @pitch.player1, @pitch.player2, @pitch.player3]
+    end
+  end
+
+  describe "when calculating the hand winner" do
+    before(:each) do
+      pitch.trump = "H"
+    end
+
+    it "the first card played must be trump" do
+#      currently_played_cards = { @pitch.player1 => "AH", @pitch.player2 => "QH", @pitch.player3 => "4C", @pitch.player4 => "8D"}
+#      pitch.calculate_results currently_played_cards
+
+    end
+
+    it "a low trump card beats any other high card" do
 
     end
   end

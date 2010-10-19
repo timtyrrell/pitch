@@ -1,7 +1,9 @@
 require './pitch'
 
+#start game
 pitch = Pitch.new
 
+#collect bids
 bids = {}
 pitch.players.each do |player|
   puts "#{player.name}, your bid (2 to 5)?"
@@ -14,17 +16,22 @@ end
 
 pitch.accept_bids bids
 
+#assign trump
 bid_winner = pitch.current_high_bid["player"]
-
 puts "#{bid_winner.name}, select trump(H,D,S,C):"
 STDOUT.flush
 pitch.trump = gets.chomp
 puts "Trump is #{pitch.trump}"
 
-puts "#{bid_winner.name}, it is your lead. Play a trump card:"
+#collect cards for round 1
+currently_played_cards = {}
+puts "#{bid_winner.name}, it is your lead. Please lead with a trump card"
+pitch.current_round_player_order.each do |player|
+  puts "#{player.name} available cards: #{player.cards}"
+  STDOUT.flush
+  currently_played_cards[player] = gets.chomp
+end
 
-#each player starting with the bid winner plays a card
-
-STDOUT.flush
-#pitch.current_hand = { player => gets.chomp}
+#calculate and output current turn results
+pitch.calculate_results currently_played_cards
 
