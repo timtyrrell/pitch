@@ -1,2 +1,13 @@
 - only accept numbers in the bid
+- should allow player to shuiffle as much as they want
+- should allow them to ask the player to their right if they want to cut
+- test to see if shuffle(and) others are called
+- add a "q" to quit functionality
+- validate card_cuit when declaring trump
+- throw error on declare_trump if the winner is not the player attemping the declaration
+- force player to follow suit (play card method?)
+- display score at the top:
+
+- regex for limited numbers
+- comparison to see if greater than other bids
 
