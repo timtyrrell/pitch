@@ -7,7 +7,7 @@ describe "Pitch game testing" do
   describe "when starting a game of pitch" do
     it "should shuffle the cards into a random order" do
       @current_deck = @pitch.deck.cards.clone
-      @match_result = @current_deck <=> @pitch.deck.shuffle_cards
+      @match_result = @current_deck <=> @pitch.deck.shuffle_cards!
       @match_result.should_not == 0
     end
 

@@ -1,3 +1,4 @@
+# encoding: utf-8
 require './pitch'
 require './screen_util.rb'
 
@@ -29,10 +30,10 @@ card_suit = ['H','D', 'S', 'C']
 puts "#{bid_winner.name}, enter the number to the left of the card to declare it as trump:"
 puts "Your current cards: #{bid_winner.cards}"
 puts ""
-puts "1 -- H"
-puts "2 -- D"
-puts "3 -- S"
-puts "4 -- C"
+puts "1 -- ♥"
+puts "2 -- ♦"
+puts "3 -- ♠"
+puts "4 -- ♣"
 STDOUT.flush
 trump_selection = gets.chomp.to_i
 pitch.declare_trump bid_winner, card_suit[trump_selection - 1]

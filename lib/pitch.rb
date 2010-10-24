@@ -46,10 +46,13 @@ class Pitch
 
       card_value_lookup = {"2" => 2,"3" => 3,"4" => 4,"5" => 5,"6" => 6,"7" => 7,"8" => 8,"9" => 9,"10" => 10,"J" => 11,"Q" => 12,"K" => 13, "A" => 14}
 
+      #trump always wins against non-trump
       if card_suit == self.trump and current_high_card_suit != self.trump
         current_high_player_and_card = {"player" => player, "card" => card}
+      #trump vs. trump comparison
       elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit == self.trump and current_high_card_suit == self.trump
         current_high_player_and_card = {"player" => player, "card" => card}
+      #non-trump vs. non-trump comparison
       elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit != self.trump and current_high_card_suit != self.trump
         current_high_player_and_card = {"player" => player, "card" => card}
       end
@@ -75,7 +78,6 @@ class Pitch
       @players << @players.shift
     end
     @current_round_player_order = @players
-
   end
 
   private
@@ -97,7 +99,7 @@ class Pitch
     end
 
     def deal_cards
-      @deck.shuffle_cards
+      @deck.shuffle_cards!
       2.times{
         self.players.each do |player|
           3.times{
