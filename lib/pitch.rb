@@ -99,6 +99,7 @@ class Pitch
     end
 
     def deal_cards
+      #two passes dealing three cards to each four players
       @deck.shuffle_cards!
       2.times{
         self.players.each do |player|

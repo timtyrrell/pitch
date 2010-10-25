@@ -132,8 +132,16 @@ describe "Pitch game testing" do
       result = @pitch.calculate_round_winner currently_played_cards
       result.name.should == "Player1"
     end
-#    it "should have the first card played during the first hand must be trump" do
-#    end
+    it "should set the team1 pile of player1 wins the hand" do
+      currently_played_cards = { @pitch.player1 => "2H", @pitch.player2 => "2C", @pitch.player3 => "9S", @pitch.player4 => "QS"}
+      @pitch.calculate_round_winner currently_played_cards
+      @pitch.team1_card_pile.should_not be_empty
+    end
+    it "should set the team2 pile of player4 wins the hand" do
+      currently_played_cards = { @pitch.player1 => "3C", @pitch.player2 => "2C", @pitch.player3 => "9S", @pitch.player4 => "QH"}
+      @pitch.calculate_round_winner currently_played_cards
+      @pitch.team2_card_pile.should_not be_empty
+    end
   end
 end
 

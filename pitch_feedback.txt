@@ -1,0 +1,17 @@
+pitch feedback:
+
+Please break it down into helper functions, there's so much going on there it, you might have a need for a whole object to replace that method
+I didn't read it though
+play_game really ought to be bin/pitch
+and then it should instantiate something like a Pitch::Application
+and just call run() on it
+and then proper functions should be in place for everything that's in this big mess
+it's easier for me to give extensions on projects than it is on assignments
+so since we're down to the wire, try to get your assignments sewed up
+I'll be around throughout the day tomorrow
+yeah, but again, we've gone over this many times in RMU
+the emphasis is on building something smaller than you anticipated if needed, but building it well
+so the refactoring needs to be done before you can get credit
+yes, but it should have been your focus on your project, too
+Anyway, just do the best you can with the time you have left
+

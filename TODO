@@ -10,4 +10,5 @@
 
 - regex for limited numbers
 - comparison to see if greater than other bids
+- test, should have the first card played during the first hand must be trump
 
