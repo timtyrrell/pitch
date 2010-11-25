@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/player'
 require File.dirname(__FILE__) + '/deck'
 
 class Pitch
-  attr_reader :deck, :player1, :player2, :player3, :player4, :players, :current_dealer
+  attr_reader :deck, :player1, :player2, :player3, :player4, :players, :current_dealer, :card_value_lookup
   attr_accessor :current_high_bid, :trump, :current_round_player_order, :team1_card_pile, :team2_card_pile
 
   def initialize
@@ -12,8 +12,9 @@ class Pitch
     @current_round_player_order = []
     assign_current_dealer
     deal_cards
-    @team1_card_pile =[]
+    @team1_card_pile = []
     @team2_card_pile = []
+    @card_value_lookup = {"2" => 2,"3" => 3,"4" => 4,"5" => 5,"6" => 6,"7" => 7,"8" => 8,"9" => 9,"10" => 10,"J" => 11,"Q" => 12,"K" => 13, "A" => 14}
   end
 
   def round_ended
@@ -31,29 +32,31 @@ class Pitch
   end
 
   def calculate_round_winner(played_cards)
+    #set first player and card as high
     current_high_player_and_card = {"player" => played_cards.first.first, "card" => played_cards.first.last}
-
+    #set first card value as high
     current_high_card_value = current_high_player_and_card["card"].chop
+    #set first card suit as leading suite and high card suit
     leading_suit = current_high_card_suit = current_high_player_and_card["card"][-1]
 
     card_pile = []
     played_cards.each do |player, card|
       card_pile << card
+      #all but the last character is the card value
       card_value = card.chop
+      #last character is the suit
       card_suit = card[-1]
       current_high_card_value = current_high_player_and_card["card"].chop
       current_high_card_suit = current_high_player_and_card["card"][-1]
 
-      card_value_lookup = {"2" => 2,"3" => 3,"4" => 4,"5" => 5,"6" => 6,"7" => 7,"8" => 8,"9" => 9,"10" => 10,"J" => 11,"Q" => 12,"K" => 13, "A" => 14}
-
       #trump always wins against non-trump
-      if card_suit == self.trump and current_high_card_suit != self.trump
+      if card_suit == @trump and current_high_card_suit != @trump
         current_high_player_and_card = {"player" => player, "card" => card}
       #trump vs. trump comparison
-      elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit == self.trump and current_high_card_suit == self.trump
+      elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit == @trump and current_high_card_suit == @trump
         current_high_player_and_card = {"player" => player, "card" => card}
       #non-trump vs. non-trump comparison
-      elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit != self.trump and current_high_card_suit != self.trump
+      elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit != @trump and current_high_card_suit != @trump
         current_high_player_and_card = {"player" => player, "card" => card}
       end
     end
@@ -68,7 +71,7 @@ class Pitch
 
   def declare_trump(player, card_suit)
     if player == @current_high_bid["player"]
-      self.trump = card_suit
+      @trump = card_suit
     end
   end
 
