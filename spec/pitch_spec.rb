@@ -1,8 +1,9 @@
-require File.dirname(__FILE__) + '/../lib/pitch'
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
+require 'pitch'
 
 describe "Pitch game testing" do
   before(:each) do
-    @pitch = Pitch.new
+    @pitch = Pitch::Game.new
   end
   describe "when starting a game of pitch" do
     it "should shuffle the cards into a random order" do
