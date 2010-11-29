@@ -9,9 +9,9 @@ module Pitch
         puts "\e[H\e[2J" # clear the screen
       end
 
-      def input_bids(pitch)
+      def input_bids(players)
         bids = {}
-        pitch.players.each do |player|
+        players.each do |player|
           Pitch::Util::ScreenUtil.clear
           unless bids.length == 0
             puts "***Current Bids***"
@@ -26,17 +26,16 @@ module Pitch
           STDOUT.flush
           bids[player] = gets.chomp.to_i
         end
-        bids
+        return bids
       end
 
-      def accept_bids_and_declare_winner(pitch, bids)
+      def declare_bid_winner(game)
         Pitch::Util::ScreenUtil.clear
-        pitch.accept_bids bids
-        puts pitch.trump
-        pitch.current_high_bid['player']
+        puts game.trump
+        return game.current_high_bid['player']
       end
 
-      def bid_winner_declares_trump(pitch, bid_winner)
+      def bid_winner_declares_trump(bid_winner)
         card_suit = ['H','D', 'S', 'C']
         puts "#{bid_winner.name}, enter the number to the left of the card to declare it as trump:"
         puts "Your current cards: #{bid_winner.cards}"
@@ -49,13 +48,13 @@ module Pitch
         gets.chomp.to_i
       end
 
-      def collect_cards(pitch, bid_winner)
+      def collect_cards(game, bid_winner)
         Pitch::Util::ScreenUtil.clear
         currently_played_cards = {}
         puts "#{bid_winner.name}, it is your lead. Please lead with a trump card"
-        pitch.current_round_player_order.each do |player|
+        game.current_round_player_order.each do |player|
           Pitch::Util::ScreenUtil.clear
-          puts "Current Trump: #{pitch.trump}"
+          puts "Current Trump: #{game.trump}"
           unless currently_played_cards.empty?
             puts "****"
             currently_played_cards.each do |player, card|
@@ -78,9 +77,8 @@ module Pitch
           player.cards.delete_at(number_selected-1)
         end
         Pitch::Util::ScreenUtil.clear
-        currently_played_cards
+        return currently_played_cards
       end
-
     end
   end
 end

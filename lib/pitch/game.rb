@@ -4,15 +4,26 @@ module Pitch
     attr_accessor :current_high_bid, :trump, :current_round_player_order, :team1_card_pile, :team2_card_pile
 
     def initialize
-      get_cards
-      get_players
       @player_position = 0
       @current_round_player_order = []
-      assign_current_dealer
-      deal_cards
       @team1_card_pile = []
       @team2_card_pile = []
       @card_value_lookup = {"2" => 2,"3" => 3,"4" => 4,"5" => 5,"6" => 6,"7" => 7,"8" => 8,"9" => 9,"10" => 10,"J" => 11,"Q" => 12,"K" => 13, "A" => 14}
+    end
+
+    def run
+      start_round
+
+      bids = Pitch::Util::ScreenUtil.input_bids(@players)
+      accept_bids(bids)
+      bid_winner = Pitch::Util::ScreenUtil.declare_bid_winner(self)
+      trump_selection = Pitch::Util::ScreenUtil.bid_winner_declares_trump(bid_winner)
+      declare_trump(bid_winner, @deck.card_suit[trump_selection - 1])
+      played_cards = Pitch::Util::ScreenUtil.collect_cards(self, bid_winner)
+
+      #calculate and output current turn results
+      winning_player = Pitch::ScoreCalculator.calculate_round_winner(self, played_cards)
+      puts "#{winning_player.name} on #{winning_player.team} won the hand!"
     end
 
     def round_ended
@@ -29,44 +40,6 @@ module Pitch
       set_round_player_order
     end
 
-    def calculate_round_winner(played_cards)
-      #set first player and card as high
-      current_high_player_and_card = {"player" => played_cards.first.first, "card" => played_cards.first.last}
-      #set first card value as high
-      current_high_card_value = current_high_player_and_card["card"].chop
-      #set first card suit as leading suite and high card suit
-      leading_suit = current_high_card_suit = current_high_player_and_card["card"][-1]
-
-      card_pile = []
-      played_cards.each do |player, card|
-        card_pile << card
-        #all but the last character is the card value
-        card_value = card.chop
-        #last character is the suit
-        card_suit = card[-1]
-        current_high_card_value = current_high_player_and_card["card"].chop
-        current_high_card_suit = current_high_player_and_card["card"][-1]
-
-        #trump always wins against non-trump
-        if card_suit == @trump and current_high_card_suit != @trump
-          current_high_player_and_card = {"player" => player, "card" => card}
-        #trump vs. trump comparison
-        elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit == @trump and current_high_card_suit == @trump
-          current_high_player_and_card = {"player" => player, "card" => card}
-        #non-trump vs. non-trump comparison
-        elsif card_suit == leading_suit and card_value_lookup[card_value] > card_value_lookup[current_high_card_value] and card_suit != @trump and current_high_card_suit != @trump
-          current_high_player_and_card = {"player" => player, "card" => card}
-        end
-      end
-
-      if current_high_player_and_card["player"].team == "team1"
-        @team1_card_pile << card_pile
-      else
-        @team2_card_pile << card_pile
-      end
-      current_high_player_and_card["player"]
-    end
-
     def declare_trump(player, card_suit)
       if player == @current_high_bid["player"]
         @trump = card_suit
@@ -79,6 +52,13 @@ module Pitch
         @players << @players.shift
       end
       @current_round_player_order = @players
+    end
+
+    def start_round
+      get_cards
+      get_players
+      assign_current_dealer
+      deal_cards
     end
 
     private
@@ -100,10 +80,10 @@ module Pitch
       end
 
       def deal_cards
-        #two passes dealing three cards to each four players
+        #two passes dealing three cards to each of the four players
         @deck.shuffle_cards!
         2.times{
-          self.players.each do |player|
+          @players.each do |player|
             3.times{
               player.cards << @deck.cards.slice!(0)
             }
